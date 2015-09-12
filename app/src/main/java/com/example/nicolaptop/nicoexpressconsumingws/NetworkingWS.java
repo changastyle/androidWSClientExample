@@ -34,38 +34,8 @@ public class NetworkingWS extends AsyncTask<String, Void, String>
         String resp;
         String SOAP_ACTION_PREFIX = NAMESPACE +  METHOD;
 
-        try
-        {
-            SoapObject request = new SoapObject(NAMESPACE, METHOD);
-            PropertyInfo propInfo=new PropertyInfo();
-            propInfo.setName("name");
-            propInfo.setType(String.class);
-            //propInfo.setValue("Nicolas Grossi");
-            propInfo.setValue(this.nombre);
-            request.addProperty(propInfo);
-
-
-
-            SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-            envelope.setOutputSoapObject(request);
-
-            HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
-
-            androidHttpTransport.call(SOAP_ACTION_PREFIX, envelope);
-
-            SoapPrimitive  resultsRequestSOAP = (SoapPrimitive) envelope.getResponse();
-
-            resultado = resultsRequestSOAP.toString();
-            System.out.println("RESULTADO :" + resultado);
-
-
-
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            System.out.println("ERROR: con el WS." );
-        }
+        WSClientAndroid wsClientAndroid = new WSClientAndroid(NAMESPACE,URL);
+        this.resultado =  wsClientAndroid.ejecutarMetodo(METHOD,nombre).toString();
         return "Executed";
     }
 
